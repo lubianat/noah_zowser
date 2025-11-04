@@ -233,7 +233,13 @@ def load_zarr(zarr_url, average_count=5):
 
     if not response:
         log.error(f"No zarr.json found at {zarr_url}")
-        return {}
+
+        # Trying v0.4
+        response = load_json(zarr_url + "/.zattrs")
+        if not response:
+            log.error(f"No .zattrs found at {zarr_url}")
+
+            return {}
 
     ome_zarr_kind = detect_ome_zarr_kind(response)
 
